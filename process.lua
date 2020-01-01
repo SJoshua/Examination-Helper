@@ -1,7 +1,8 @@
 function init()
 	dofile("out.txt")
 	math.randomseed(os.time())
-	os.execute("@title Examination Helper @ History - Au: SJoshua")
+	local ext = subtitle and ("@ " .. subtitle .. " ") or ""
+	os.execute("@title Examination Helper " .. ext .. "- Au: SJoshua")
 	os.execute("@chcp 936")
 end
 
@@ -52,6 +53,7 @@ function exam(chapt)
 			ans = t[id]:match("([ABCDEFGHIJKoxOXT]+)[ \t]*\n")
 			if ans then
 				t[id] = t[id]:gsub("([ABCDEFGHIJKoxOXT]+)[ \t]*\n", "\n")
+				ans = ans:gsub("%s", "")
 			end
 		end
 		if not ans then
@@ -62,7 +64,10 @@ function exam(chapt)
 		elseif ans == chars.right or ans == "o" or ans == "T" or ans == "O" then
 			ans = "T"
 		end
-		if ans == "T" or ans == "F" then
+
+		if special_mode then -- fuck XX
+			io.write("[Multiple Choice] ")
+		elseif ans == "T" or ans == "F" then
 			io.write("[True or False] ")
 		elseif #ans == 1 then
 			io.write("[Single Choice] ")
@@ -74,7 +79,7 @@ function exam(chapt)
 		if (cmd == "EXIT") then
 			break
 		end
-		io.write("Correct Answer: ", ans,"\n\n")
+		io.write("Correct Answer: ", ans, "\n\n")
 		--if (ans == "[NOT FOUND]") then for i = 1, 100 do io.read() end end
 		os.execute("pause")
 	end	
